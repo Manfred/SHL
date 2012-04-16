@@ -1,15 +1,9 @@
-require 'test/unit'
-
-ROOT = File.expand_path('../../', __FILE__)
-$:.unshift File.expand_path('lib', ROOT)
+require File.expand_path('../helper', __FILE__)
 
 $server = Process.fork
 if $server.nil?
   exec "/usr/bin/env ruby #{File.expand_path('test/server.rb', ROOT)}"
 else
-  require 'shl'
-  require 'uri'
-
   class SHLTest < Test::Unit::TestCase
     BASE_URL = 'http://localhost:32776'
 
@@ -20,7 +14,7 @@ else
 
     def test_generates_a_request
       request = SHL::Request.new(:verb => :get, :url => BASE_URL)
-      assert_equal "GET / HTTP/1.1\r\n",
+      assert_equal "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n",
         request.to_s
     end
 

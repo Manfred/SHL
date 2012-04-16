@@ -1,1 +1,1 @@
-task(:default){sh"ruby #{Dir.glob('test/*_test.rb')}"}
+task(:default){Dir.glob('test/*_test.rb').each{|f|sh"ruby #{f}"}}

@@ -9,7 +9,7 @@ class Webserver
     :not_found             => '404 Not Found',
     :internal_server_error => '500 Internal Server Error'
   }
-  
+
   def status_line(name)
     if code_and_phrase = CODES_AND_PHRASES[name]
       "HTTP/1.1 #{code_and_phrase}#{N}"
@@ -17,14 +17,14 @@ class Webserver
       raise ArgumentError, "Unknown status `#{name}'"
     end
   end
-  
+
   def response(client, status, body)
     client.write status_line(status)
     client.write "Content-Type: text/plain#{N}"
     client.write N
     client.write body
   end
-  
+
   def run
     server = TCPServer.new(PORT)
     loop do
@@ -35,9 +35,9 @@ class Webserver
           if match = REQUEST_LINE.match(request_line)
             verb = match[1]
             path = match[2]
-          
+
             log("#{verb} #{path}")
-          
+
             case path
             when '/'
               response(client, :ok, 'OK!')
@@ -52,24 +52,24 @@ class Webserver
         rescue => e
           response(client, :internal_server_error, [e.message, e.backtrace.join("\n")].join("\n"))
         end
+        client.flush
         client.close
       end
     end
   end
-  
+
   def log(message)
     puts "#{Time.now.to_s} #{message}"
   end
-  
+
   def self.run
     new.run
   end
 end
 
-
 if ARGV[0] == 'test'
   require 'test/unit'
-  
+
   class WebserverTest < Test::Unit::TestCase
     def test_request_regexp
       match = Webserver::REQUEST_LINE.match("GET / HTTP/1.1\r\n")

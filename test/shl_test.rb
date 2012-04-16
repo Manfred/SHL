@@ -7,15 +7,23 @@ else
   class SHLTest < Test::Unit::TestCase
     BASE_URL = 'http://localhost:32776'
 
-    def test_returns_a_request_line
-      assert_equal "GET / HTTP/1.1",
-        SHL::Request.new(:verb => :get, :url => BASE_URL).request_line
+    def setup
+      @request = SHL::Request.new(:verb => :get, :url => BASE_URL)
     end
 
-    def test_generates_a_request
-      request = SHL::Request.new(:verb => :get, :url => BASE_URL)
-      assert_equal "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n",
-        request.to_s
+    def test_returns_a_request_line
+      assert_equal "GET / HTTP/1.1",
+        @request.request_line
+    end
+
+    def test_returns_serialized_headers
+      assert_equal "Host: localhost\r\nConnection: close",
+        @request.serialized_headers
+    end
+
+    def test_returns_serialized_body
+      assert_equal "\r\n",
+        @request.serialized_body
     end
 
     def test_request

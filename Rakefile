@@ -1,0 +1,1 @@
+task(:default){sh"ruby #{Dir.glob('test/*_test.rb')}"}

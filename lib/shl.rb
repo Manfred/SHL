@@ -1,6 +1,5 @@
 require 'uri'
 require 'socket'
-
 module SHL
   V = "HTTP/1.1"
   N = "\r\n"
@@ -86,7 +85,6 @@ module SHL
     end
   end
 end
-
 def SHL(a={})
   SHL::Request.new(a).run
 end

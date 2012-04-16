@@ -4,6 +4,7 @@ $server = Process.fork
 if $server.nil?
   exec "/usr/bin/env ruby #{File.expand_path('test/server.rb', ROOT)}"
 else
+  sleep 0.1
   class SHLTest < Test::Unit::TestCase
     BASE_URL = 'http://localhost:32776'
 

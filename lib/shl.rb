@@ -53,32 +53,17 @@ module SHL
     def serialized_body
       @body.to_s+N
     end
-    def write(connection)
-      connection.write(request_line)
-      connection.write(N)
-      connection.write(serialized_headers)
-      connection.write(N)
-      connection.write(serialized_body)
-      connection.flush
-    end
-    def response
-      Response.new(:io=>connection)
-    end
     def run
-      write(connection)
-      response
-    end
-    def to_s
-      require 'stringio'
-      write(out=StringIO.new)
-      out.rewind; out.read
+      connection.write([request_line,serialized_headers,serialized_body].join(N))
+      connection.flush
+      Response.new(:io=>connection)
     end
   end
   class Response < RR
     BL = 4096
     attr_accessor :io
     def parse
-      b='';while(d=io.read(BL));b<<d;end;b.split(N*2)
+      b='';while(d=io.read(BL));b<<d;end;io.close;b.split(N*2)
     end
     def body
       parse[1]

@@ -13,8 +13,14 @@ else
     end
 
     def test_returns_a_request_line
-      assert_equal "GET / HTTP/1.1",
-        @request.request_line
+      [
+        [:get,  "GET"],
+        [:post, "POST"]
+      ].each do |verb, expected|
+        @request.verb = verb
+        assert_equal "#{expected} / HTTP/1.1",
+          @request.request_line
+      end
     end
 
     def test_returns_serialized_headers
@@ -27,8 +33,14 @@ else
         @request.serialized_body
     end
 
-    def test_request
+    def test_get_request
       response = SHL(:verb => :get, :url => BASE_URL)
+      assert_equal "OK!",
+        response.body
+    end
+
+    def test_post_request
+      response = SHL(:verb => :post, :url => BASE_URL)
       assert_equal "OK!",
         response.body
     end

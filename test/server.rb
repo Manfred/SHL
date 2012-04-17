@@ -3,7 +3,7 @@ require 'socket'
 class Webserver
   N = "\r\n"
   PORT = 32776
-  REQUEST_LINE = /^(GET)\s+([^\s]+)\s+HTTP\/1\.1\s*$/
+  REQUEST_LINE = /^(GET|POST)\s+([^\s]+)\s+HTTP\/1\.1\s*$/
   CODES_AND_PHRASES = {
     :ok                    => '200 OK',
     :not_found             => '404 Not Found',

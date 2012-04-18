@@ -8,9 +8,7 @@ module SHL
       a.each{|k,v|self[k]=v}
     end
     def []=(k,v)
-      @_o||=[]
-      @_o<<k
-      super
+      (@_o||=[])<<k;super
     end
     def each(&block)
       @_o.each{|k|block.call(k,self[k])}

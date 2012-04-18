@@ -33,6 +33,12 @@ else
         @request.serialized_body
     end
 
+    def test_changes_default_headers
+      accept = '*/*; charset=utf-8'
+      @request.headers['Accept'] = accept
+      assert_equal accept, @request.headers['Accept']
+    end
+
     def test_get_request
       response = SHL(:verb => :get, :url => BASE_URL)
       assert_equal "OK!",

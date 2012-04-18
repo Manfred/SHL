@@ -33,14 +33,11 @@ module SHL
     def request_line
       "#{verb.to_s.upcase} #{path} #{V}"
     end
-    def default_headers
-      OrderedHash.new([
+    def headers
+      @headers||=OrderedHash.new([
         ['Host',@url.host],
         ['Connection','close']
       ])
-    end
-    def headers
-      @headers||=default_headers
     end
     def headers=(v)
       headers.merge(v)

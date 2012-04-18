@@ -2,8 +2,8 @@ require 'uri'
 require 'socket'
 
 module SHL
-  V = "HTTP/1.1"
-  N = "\r\n"
+  HTTP_VERSION = "HTTP/1.1"
+  NEWLINE = "\r\n"
   
   class OrderedHash < Hash
     def initialize(a)

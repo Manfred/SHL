@@ -11,7 +11,7 @@ module SHL
       @connection||=TCPSocket.new(@url.host,@url.port)
     end
     def request_line
-      "#{verb.to_s.upcase} #{path} #{V}"
+      "#{verb.to_s.upcase} #{path} #{HTTP_VERSION}"
     end
     def headers
       @headers||=OrderedHash.new([
@@ -20,13 +20,13 @@ module SHL
       ])
     end
     def serialized_headers
-      headers.map{|k,v|"#{k}: #{v}"}.join(N)
+      headers.map{|k,v|"#{k}: #{v}"}.join(NEWLINE)
     end
     def serialized_body
-      @body.to_s+N
+      @body.to_s+NEWLINE
     end
     def run
-      connection.write([request_line,serialized_headers,serialized_body].join(N))
+      connection.write([request_line,serialized_headers,serialized_body].join(NEWLINE))
       connection.flush
       Response.new(:io=>connection)
     end

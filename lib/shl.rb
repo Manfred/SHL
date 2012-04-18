@@ -6,20 +6,30 @@ module SHL
   NEWLINE = "\r\n"
   
   class OrderedHash < Hash
-    def initialize(a)
-      a.each{|k,v|self[k]=v}
+    def initialize(initial_values)
+      initial_values.each do |key, value|
+        self[key] = value
+      end
     end
-    def []=(k,v)
-      (@_o||=[])<<k;super
+    
+    def []=(key, value)
+      @order ||= []
+      @order << key
+      super
     end
+    
     def each(&block)
-      @_o.each{|k|block.call(k,self[k])}
+      @order.each do |key|
+        block.call(key, self[key])
+      end
     end
   end
   
   class RR
-    def initialize(a={})
-      a.map{|k,v|send("#{k}=",v)}
+    def initialize(attributes={})
+      attributes.each do |key, value|
+        send("#{key}=", value)
+      end
     end
   end
 end
@@ -27,6 +37,6 @@ end
 require 'shl/request'
 require 'shl/response'
 
-def SHL(a={})
-  SHL::Request.new(a).run
+def SHL(attributes={})
+  SHL::Request.new(attributes).run
 end

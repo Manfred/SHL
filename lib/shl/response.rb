@@ -1,12 +1,21 @@
 module SHL
   class Response < RR
     BUFFER_LENGTH = 4096
+    
     attr_accessor :io
-    def parse
-      b='';while(d=io.read(BUFFER_LENGTH));b<<d;end;b.split(NEWLINE*2)
+    
+    def parsed
+      if @parsed.nil?
+        buffer = ''
+        while(data = io.read(BUFFER_LENGTH))
+          buffer << data
+        end
+        @parsed = buffer.split(NEWLINE*2)
+      end; @parsed
     end
+    
     def body
-      parse[1]
+      parsed[1]
     end
   end
 end

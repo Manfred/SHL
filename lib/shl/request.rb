@@ -1,6 +1,8 @@
 module SHL
-  class Request < RR
+  class Request
     attr_accessor :verb, :url, :headers, :body
+    
+    include AttributeInitializer
     
     def url=(url)
       @url = URI.parse(url)

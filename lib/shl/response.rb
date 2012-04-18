@@ -1,8 +1,10 @@
 module SHL
-  class Response < RR
+  class Response
     BUFFER_LENGTH = 4096
     
     attr_accessor :io
+    
+    include AttributeInitializer
     
     def parsed
       if @parsed.nil?

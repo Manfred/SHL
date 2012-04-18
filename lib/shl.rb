@@ -39,9 +39,6 @@ module SHL
         ['Connection','close']
       ])
     end
-    def headers=(v)
-      headers.merge(v)
-    end
     def serialized_headers
       headers.map{|k,v|"#{k}: #{v}"}.join(N)
     end

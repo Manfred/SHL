@@ -1,5 +1,7 @@
 module SHL
   class Request
+    BUFFER_LENGTH = 4096
+    
     attr_accessor :verb, :url, :headers, :body
     
     include AttributeInitializer
@@ -12,8 +14,8 @@ module SHL
       @url.path == '' ? '/' : @url.path
     end
     
-    def connection
-      @connection ||= TCPSocket.new(@url.host, @url.port)
+    def socket
+      @socket ||= TCPSocket.new(@url.host, @url.port)
     end
     
     def request_line
@@ -37,10 +39,20 @@ module SHL
       @body.to_s + NEWLINE
     end
     
+    def raw_response
+      if @raw_response.nil?
+        @raw_response = ''
+        while(data = socket.read(BUFFER_LENGTH))
+          @raw_response << data
+        end
+        socket.close
+      end; @raw_response
+    end
+    
     def run
-      connection.write([request_line,serialized_headers,serialized_body].join(NEWLINE))
-      connection.flush
-      Response.new(:io=>connection)
+      socket.write([request_line,serialized_headers,serialized_body].join(NEWLINE))
+      socket.flush
+      Response.new(:raw => raw_response)
     end
   end
 end

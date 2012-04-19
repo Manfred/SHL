@@ -26,18 +26,15 @@ module SHL
       at = :start
       lines = raw.split(NEWLINE)
       while(line = lines.shift)
-        case at
-        when :start
+        if at == :start
           @status_line = line
           at = :headers
-        when :headers
-          if line == ''
-            at = :body
-          else
-            key, value = parse_header(line)
-            @headers[key] = value
-          end
-        when :body
+        elsif at == :headers && line == ''
+          at = :body
+        elsif at == :headers
+          key, value = parse_header(line)
+          @headers[key] = value
+        elsif at == :body
           @body << line
         end
       end

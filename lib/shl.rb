@@ -6,7 +6,7 @@ module SHL
   NEWLINE = "\r\n"
   
   class OrderedHash < Hash
-    def initialize(initial_values)
+    def initialize(initial_values=[])
       initial_values.each do |key, value|
         self[key] = value
       end
